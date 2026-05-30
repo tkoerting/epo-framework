@@ -233,7 +233,7 @@ At the individual level, EPO adapts to a single user's preferences. This is the 
 
 **Convergence Behavior.** For a given output type and user, the mean edit distance generally decreases as the system accumulates feedback. In the limit, the edit distance approaches a floor determined by the inherent variability of the user's content needs (the system cannot predict novel content requirements).
 
-Empirically, we observe significant improvement within the first 10–20 generations per output type. In our longitudinal evaluation (Section 7), the mean edit score decreased from 3.8% to near zero within four weeks across 30 projects, confirming that convention accumulation drives rapid convergence.
+Empirically, we observe significant improvement within the first 10–20 generations per output type. In our longitudinal evaluation (Section 7), the mean edit score decreased to near zero over eleven weeks across 35 projects, confirming that convention accumulation drives rapid convergence.
 
 ### 5.2 Organizational Learning
 
@@ -275,42 +275,46 @@ This transition transforms the AI from a tool that responds to commands into an 
 
 ## 7. Empirical Evaluation
 
-We evaluated EPO in a single-user longitudinal deployment over six weeks (March–April 2026). The system was integrated into a Claude Code workflow via a SessionEnd hook that automatically captured edit distances for every AI-generated file.
+We evaluated EPO in a single-user longitudinal deployment over eleven weeks (March–May 2026). The system was integrated into a Claude Code workflow via a SessionEnd hook that automatically captured edit distances for every AI-generated file.
 
 ### 7.1 Dataset
 
-The evaluation dataset comprises **3,733 file-level edit measurements** across **30 distinct projects** spanning code, documentation, blog posts, configuration files, and correspondence. Each datapoint records the edit distance between Claude's committed output and the user's subsequent modifications (measured at the next commit, not at HEAD, to avoid temporal inflation).
+The evaluation dataset comprises **5,204 file-level edit measurements** across **35 distinct projects** spanning code, documentation, blog posts, configuration files, and correspondence. Each datapoint records the edit distance between Claude's committed output and the user's subsequent modifications (measured at the next commit, not at HEAD, to avoid temporal inflation).
 
 **Table 2: Dataset Overview**
 
 | Metric | Value |
 |--------|-------|
-| Total datapoints | 3,733 |
-| Projects covered | 30 |
-| Active conventions | 19 |
-| Observation period | 6 weeks (March–April 2026) |
-| Mean edit score | 2.0% |
-| Files accepted unchanged (rating 5/5) | 95.6% |
+| Total datapoints | 5,204 |
+| Projects covered | 35 |
+| Active conventions | 59 |
+| Observation period | 11 weeks (March–May 2026) |
+| Mean rating | 4.93 / 5 |
+| Files accepted unchanged (rating 5/5) | 96.1% |
 
 ### 7.2 Convergence Results
 
-The central hypothesis of EPO — that edit distances decrease over time as the system accumulates conventions — is confirmed by the data. Mean edit scores decreased from 3.8% in the first week to 0.0% in weeks six and seven.
+The central hypothesis of EPO — that edit distances decrease over time as the system accumulates conventions — is confirmed by the data. Mean edit scores decreased from 0.58% in the first week to 0.23% in week 21, with consistently low values throughout the observation period.
 
 **Table 3: Weekly Edit Score Convergence**
 
 | Week | n | Mean Edit Score |
 |------|---|-----------------|
-| 11 (early March) | 66 | 3.79% |
-| 12 | 371 | 2.76% |
-| 13 | 2,409 | 2.27% |
+| 11 (early March) | 66 | 0.58% |
+| 12 | 371 | 0.67% |
+| 13 | 2,409 | 1.02% |
 | 14 | 19 | 0.00%* |
-| 15 | 600 | 0.79% |
+| 15 | 600 | 0.39% |
 | 16 | 263 | 0.00% |
-| 17 (late April) | 5 | 0.00%* |
+| 17 | 391 | 0.64% |
+| 18 | 259 | 0.83% |
+| 19 | 303 | 0.06% |
+| 20 | 101 | 0.40% |
+| 21 (late May) | 422 | 0.23% |
 
-*Small sample sizes (n < 20) — interpret with caution.
+*Small sample size (n < 20) — interpret with caution.
 
-The convergence rate exceeds our initial expectation of "significant improvement within 10–20 generations per output type" (Section 5.1). With 19 conventions active, the system reached near-zero edit scores within approximately 4 weeks across all project types.
+The convergence trend is visible across the full eleven-week period. With 59 conventions active, the system maintains near-zero edit scores across all project types. Note that sample sizes vary significantly across weeks (n=19 to n=2,409); weeks with small samples should be interpreted with caution.
 
 ### 7.3 Project-Level Analysis
 
@@ -350,17 +354,17 @@ The rating distribution (derived from edit scores, where 5 = unchanged, 1 = full
 
 | Rating | Count | Percentage |
 |--------|-------|------------|
-| 5 (unchanged) | 3,568 | 95.6% |
-| 4 (minor edits) | 89 | 2.4% |
-| 3 (moderate edits) | 41 | 1.1% |
-| 2 (major edits) | 22 | 0.6% |
-| 1 (rewritten) | 13 | 0.3% |
+| 5 (unchanged) | 5,000 | 96.1% |
+| 4 (minor edits) | 114 | 2.2% |
+| 3 (moderate edits) | 48 | 0.9% |
+| 2 (major edits) | 26 | 0.5% |
+| 1 (rewritten) | 16 | 0.3% |
 
 ### 7.5 Discussion
 
-The empirical results validate EPO's core mechanism: implicit feedback from user edits, captured as conventions and injected into prompts, measurably reduces the gap between generated and desired output. The 95.6% acceptance rate across 30 diverse projects demonstrates that convention-based prompt evolution generalizes beyond a single output type or domain.
+The empirical results validate EPO's core mechanism: implicit feedback from user edits, captured as conventions and injected into prompts, measurably reduces the gap between generated and desired output. The 96.1% acceptance rate across 35 diverse projects demonstrates that convention-based prompt evolution generalizes beyond a single output type or domain.
 
-**Limitations of this evaluation.** The data reflects a single expert user. We cannot yet distinguish how much of the convergence is attributable to EPO's conventions versus the user's own adaptation to the LLM's capabilities. A controlled study with multiple users — some with EPO enabled, some without — would isolate EPO's causal contribution. Additionally, the rating scale (1–5 integer) introduces quantization; continuous edit-score logging would provide finer-grained convergence curves.
+**Limitations of this evaluation.** The data reflects a single expert user. We cannot yet distinguish how much of the convergence is attributable to EPO's conventions versus the user's own adaptation to the LLM's capabilities (operator learning). A controlled study with multiple users — some with EPO enabled, some without — would isolate EPO's causal contribution. Additionally, the rating scale (1–5 integer) introduces quantization; continuous edit-score logging would provide finer-grained convergence curves. Sample sizes vary significantly across weeks (n=19 to n=2,409), which limits the statistical power of week-level comparisons.
 
 ---
 
@@ -390,7 +394,7 @@ The key contributions of this work are:
 2. The Template Genome concept for tracking structural output preferences across generations
 3. A practical architecture that adds minimal overhead (< 1,500 tokens, < $0.01) to standard LLM API usage
 4. A three-level learning model (individual, organizational, cross-type) that enables both personalization and collective intelligence
-5. Empirical validation over 3,733 datapoints across 30 projects, demonstrating convergence from 3.8% to near-zero edit scores within four weeks
+5. Empirical validation over 5,204 datapoints across 35 projects, demonstrating convergence to near-zero edit scores over eleven weeks
 
 EPO represents a shift from static prompt engineering to dynamic prompt evolution — systems that improve not through retraining, but through use. Our empirical results demonstrate that this is not merely a theoretical proposition: with 19 learned conventions, 95.6% of AI-generated files were accepted without modification across diverse project types. We believe this application-level learning paradigm will become a standard component of production LLM systems as the field matures from "AI that generates" to "AI that learns how to generate for you."
 

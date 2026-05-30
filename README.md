@@ -15,11 +15,11 @@ No fine-tuning. No model access needed. Works with any LLM via prompt-level opti
 
 ## Results
 
-Tested across 30 projects with 3,733 datapoints over 6 weeks:
+Tested across 35 projects with 5,204 datapoints over 11 weeks:
 
-- Edit scores dropped from 3.8% to 0.0% (weekly average)
+- Edit scores consistently near zero (weekly average)
 - 96% of outputs accepted unchanged
-- 19 learned conventions active
+- 59 learned conventions active
 
 See the [whitepaper](docs/whitepaper-evolutionary-prompt-optimization.md) for methodology and evaluation.
 
