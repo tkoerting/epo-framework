@@ -20,6 +20,7 @@ from pathlib import Path
 
 from sqlalchemy import select, func
 
+from epo import __version__
 from epo.db import get_session, DEFAULT_DB_PATH
 from epo.models import EPOBase, OutputFeedback, Convention
 from epo.edit_distance import calculate_edit_score
@@ -290,7 +291,7 @@ class LocalStore:
             })
 
         return {
-            "epo_version": "0.3.1",
+            "epo_version": __version__,
             "project": project,
             "exported_at": datetime.now(timezone.utc).isoformat(),
             "feedbacks": feedback_data,

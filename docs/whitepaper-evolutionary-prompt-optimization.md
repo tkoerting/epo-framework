@@ -48,7 +48,11 @@ Preference-Driven Refinement (PDR) (White et al., 2025) systematically refines p
 
 The concept of closed-loop prompt refinement has been explored in automated evaluation settings (Google, 2025), where evaluation metrics drive iterative prompt modifications. These systems operate without human-in-the-loop feedback, optimizing for automated quality metrics. EPO differs fundamentally by placing the human editing process at the center of the feedback loop.
 
-### 2.5 Positioning of EPO
+### 2.5 Learning from User Edits
+
+CIPHER (Zheng et al., 2024, NeurIPS) learns user preferences by analyzing edit distance between LLM outputs and user-revised versions — the same core mechanism EPO uses independently. CIPHER distills edits into a single natural-language preference description that is prepended to future prompts. EPO differs in three ways: (1) it maintains a scored, multi-rule convention database rather than a single description, (2) it applies scope-aware injection (global vs. personal vs. project-level), and (3) it includes a template genome for structural optimization and a convergence indicator for monitoring learning progress.
+
+### 2.6 Positioning of EPO
 
 EPO occupies a unique position in this landscape: it learns from **implicit** feedback (user edits, not explicit ratings), operates at the **application** level (not the model level), adapts **per-user** (not globally), and requires **no additional infrastructure** beyond the standard LLM API. Table 1 summarizes the distinctions.
 
@@ -227,7 +231,7 @@ EPO supports learning at three levels of aggregation, each providing distinct va
 
 At the individual level, EPO adapts to a single user's preferences. This is the foundational level and requires no data sharing between users.
 
-**Convergence Behavior.** For a given output type and user, the mean edit distance decreases monotonically as the system accumulates feedback. In the limit, the edit distance approaches a floor determined by the inherent variability of the user's content needs (the system cannot predict novel content requirements).
+**Convergence Behavior.** For a given output type and user, the mean edit distance generally decreases as the system accumulates feedback. In the limit, the edit distance approaches a floor determined by the inherent variability of the user's content needs (the system cannot predict novel content requirements).
 
 Empirically, we observe significant improvement within the first 10–20 generations per output type. In our longitudinal evaluation (Section 7), the mean edit score decreased from 3.8% to near zero within four weeks across 30 projects, confirming that convention accumulation drives rapid convergence.
 
@@ -299,10 +303,12 @@ The central hypothesis of EPO — that edit distances decrease over time as the 
 | 11 (early March) | 66 | 3.79% |
 | 12 | 371 | 2.76% |
 | 13 | 2,409 | 2.27% |
-| 14 | 19 | 0.00% |
+| 14 | 19 | 0.00%* |
 | 15 | 600 | 0.79% |
 | 16 | 263 | 0.00% |
-| 17 (late April) | 5 | 0.00% |
+| 17 (late April) | 5 | 0.00%* |
+
+*Small sample sizes (n < 20) — interpret with caution.
 
 The convergence rate exceeds our initial expectation of "significant improvement within 10–20 generations per output type" (Section 5.1). With 19 conventions active, the system reached near-zero edit scores within approximately 4 weeks across all project types.
 
@@ -336,7 +342,7 @@ Three patterns emerge:
 
 2. **New or exploratory projects** (Project H at 8.14%, Project K at 7.69%) show higher edit scores — expected, as the user provides novel direction that no convention can anticipate.
 
-3. **Configuration and infrastructure** (ha-config at 3.23%, pii-guard at 3.91%) occupy a middle ground where domain-specific patterns require more iterations to learn.
+3. **Configuration and infrastructure** (Project E at 3.23%, Project J at 3.91%) occupy a middle ground where domain-specific patterns require more iterations to learn.
 
 ### 7.4 Rating Distribution
 

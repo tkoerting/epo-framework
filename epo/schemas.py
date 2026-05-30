@@ -94,7 +94,7 @@ class RatingTrendEntry(BaseModel):
 class EditScoreTrendEntry(BaseModel):
     date: str
     avg_score: float
-    count: int
+    count: int = 1
 
 
 class TopConventionEntry(BaseModel):

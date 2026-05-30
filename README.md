@@ -15,11 +15,11 @@ No fine-tuning. No model access needed. Works with any LLM via prompt-level opti
 
 ## Results
 
-Tested across 30 projects with 5,000+ datapoints over 8 weeks:
+Tested across 30 projects with 3,733 datapoints over 6 weeks:
 
 - Edit scores dropped from 3.8% to 0.0% (weekly average)
 - 96% of outputs accepted unchanged
-- 45 learned conventions active
+- 19 learned conventions active
 
 See the [whitepaper](docs/whitepaper-evolutionary-prompt-optimization.md) for methodology and evaluation.
 
@@ -42,6 +42,8 @@ epo inject      # Write learned rules into CLAUDE.md
 epo status      # Show current EPO state
 epo doctor      # Diagnose installation
 epo export      # Backup all data as JSON
+epo sync        # Import conventions from Claude Code memory files
+epo prune       # Remove stale or low-value conventions
 ```
 
 ## Convention Scopes

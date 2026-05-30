@@ -4,6 +4,12 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+venv/
+.venv/
 .pytest_cache/
 .epo/
+*.db
+*.sqlite3
+*.pem
+*.key
 .DS_Store

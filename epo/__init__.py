@@ -6,7 +6,7 @@ Captures implicit user feedback (edits, ratings) and evolves prompts automatical
 
 Public API:
 - Models: OutputFeedback, Convention, EPOBase, TemplateGenome, GenomeSection
-- Service: create_feedback, get_conventions_for_prompt, format_conventions_for_prompt, seed_conventions
+- Service: get_conventions_for_prompt, format_conventions_for_prompt
 - Genome: update_genome, get_genome_sections, format_genome_for_prompt
 - Router: create_router(get_db, get_user) -> APIRouter
 - Edit Distance: calculate_edit_score, calculate_section_survival
